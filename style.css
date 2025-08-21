@@ -152,3 +152,14 @@
   opacity: 1;
   visibility: visible;
 }
+
+@media (max-width: 768px) {
+  .game-score {
+    width: 400px;
+    padding: 3rem;
+
+    .info {
+      text-wrap: nowrap;
+    }
+  }
+}
