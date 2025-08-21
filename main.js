@@ -11,6 +11,17 @@ const restartGameBtn = document.getElementById("restartGameBtn");
 const gameScore = document.querySelector(".game-score");
 const shadow = document.querySelector(".shadow");
 
+const countNumber = document.getElementById("countNumber");
+const countTime = document.getElementById("countTime");
+const countAverageTime = document.getElementById("countAverageTime");
+const countMinTime = document.getElementById("countMinTime");
+const countMaxTime = document.getElementById("countMaxTime");
+
+let startTime = 0;
+let lastCorrectTime = 0;
+let timeOfThought = [];
+
+let gridSize = size.value;
 let currentNumbers = [0];
 let gameOverStatus = false;
 let gameStartStatus = true;
@@ -42,6 +53,34 @@ function resetTimer() {
 
 function gameOver() {
   if (!gameOverStatus) {
+    countNumber.textContent = gridSize * gridSize;
+    const formattedMinute = minute < 10 ? `0${minute}` : minute;
+    const formattedSecond = second < 10 ? `0${second}` : second;
+    countTime.textContent = `${formattedMinute}:${formattedSecond}`;
+
+    const averageTime =
+      timeOfThought.length > 0
+        ? (
+            timeOfThought.reduce((a, b) => a + b, 0) /
+            timeOfThought.length /
+            1000
+          ).toFixed(2)
+        : 0;
+
+    const minTime =
+      timeOfThought.length > 0
+        ? (Math.min(...timeOfThought) / 1000).toFixed(2)
+        : 0;
+
+    const maxTime =
+      timeOfThought.length > 0
+        ? (Math.max(...timeOfThought) / 1000).toFixed(2)
+        : 0;
+
+    countAverageTime.textContent = `${averageTime} сек`;
+    countMinTime.textContent = `${minTime} сек`;
+    countMaxTime.textContent = `${maxTime} сек`;
+
     gameScore.classList.add("show");
     shadow.classList.add("show");
     gameOverStatus = true;
@@ -77,16 +116,19 @@ function getRandomIndex(arr) {
 }
 
 function init() {
+  timeOfThought = [];
+  startTime = 0;
+  lastCorrectTime = 0;
   gameScore.classList.remove("show");
   shadow.classList.remove("show");
   gameOverStatus = false;
   gameStartStatus = true;
   resetTimer();
   currentNumbers = [0];
-  const gridSize = size.value;
+  gridSize = size.value;
 
-  if (gridSize < 3 || gridSize > 8) {
-    alert("Пожалуйста, выберите размер от 3 до 8.");
+  if (gridSize < 3 || gridSize > 10) {
+    alert("Пожалуйста, выберите размер от 3 до 10.");
     return;
   }
 
@@ -123,12 +165,27 @@ game.addEventListener("click", (event) => {
   if (event.target.classList.contains("square") && !gameOverStatus) {
     if (gameStartStatus) {
       gameStartStatus = false;
+      startTime = Date.now();
+      lastCorrectTime = startTime;
       timerInterval = setInterval(updateTimer, 1000);
     }
 
     const num = parseInt(event.target.textContent);
+    const currentTime = Date.now();
 
-    if (getCurrentNumber(num)) event.target.classList.add("hide");
+    if (getCurrentNumber(num)) {
+      event.target.classList.add("hide");
+      if (currentNumbers.length > 2) {
+        const timeDelta = currentTime - lastCorrectTime;
+        timeOfThought.push(timeDelta);
+        lastCorrectTime = currentTime;
+      }
+    } else {
+      event.target.classList.add("incorrect");
+      event.target.addEventListener("animationend", () => {
+        event.target.classList.remove("incorrect");
+      });
+    }
 
     if (currentNumbers.length - 1 === Number(countNumbers.textContent)) {
       gameOver();
