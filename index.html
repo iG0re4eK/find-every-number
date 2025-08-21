@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Find every number</title>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="panel">
+        <div class="timer" id="timer">00:00</div>
+        <div class="counter">
+          <div id="rightNumbers"></div>
+          /
+          <div id="countNumbers"></div>
+        </div>
+      </div>
+
+      <div class="game" id="game"></div>
+      <div class="panel">
+        <input id="size" type="number" min="3" max="8" value="5" />
+        <button class="init-btn" id="initGameBtn">Генерировать</button>
+      </div>
+    </div>
+
+    <div class="game-score">
+      <h2>Игра окончена!</h2>
+      <div class="info-container">
+        <div class="row">
+          <div class="text">Количество чисел:</div>
+          <div class="time">25</div>
+        </div>
+        <div class="row">
+          <div class="text">Время:</div>
+          <div class="time">00:00</div>
+        </div>
+        <div class="row">
+          <div class="text">Среднее время размышления:</div>
+          <div class="time">00:00</div>
+        </div>
+        <div class="row">
+          <div class="text">Минимальное время размышления:</div>
+          <div class="time">00:00</div>
+        </div>
+        <div class="row">
+          <div class="text">Максимальное время размышления:</div>
+          <div class="time">00:00</div>
+        </div>
+      </div>
+
+      <button id="restartGameBtn">Начать заново</button>
+    </div>
+
+    <div class="shadow"></div>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
