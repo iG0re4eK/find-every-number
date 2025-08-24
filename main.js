@@ -3,6 +3,7 @@ const config = { side: 50, gap: 5 };
 const game = document.getElementById("game");
 const size = document.getElementById("size");
 const initGameBtn = document.getElementById("initGameBtn");
+const gridSize = document.getElementById("gridSize");
 const countNumbers = document.getElementById("countNumbers");
 const rightNumbers = document.getElementById("rightNumbers");
 const timer = document.getElementById("timer");
@@ -21,7 +22,7 @@ let startTime = 0;
 let lastCorrectTime = 0;
 let timeOfThought = [];
 
-let gridSize = size.value;
+let gridSizeValue = 5;
 let currentNumbers = [0];
 let gameOverStatus = false;
 let gameStartStatus = true;
@@ -53,7 +54,7 @@ function resetTimer() {
 
 function gameOver() {
   if (!gameOverStatus) {
-    countNumber.textContent = gridSize * gridSize;
+    countNumber.textContent = Math.pow(gridSizeValue, 2);
     const formattedMinute = minute < 10 ? `0${minute}` : minute;
     const formattedSecond = second < 10 ? `0${second}` : second;
     countTime.textContent = `${formattedMinute}:${formattedSecond}`;
@@ -125,21 +126,19 @@ function init() {
   gameStartStatus = true;
   resetTimer();
   currentNumbers = [0];
-  gridSize = size.value;
 
-  if (gridSize < 3 || gridSize > 10) {
-    alert("Пожалуйста, выберите размер от 3 до 10.");
-    return;
-  }
-
-  const numbers = generateNumbers(gridSize);
+  const numbers = generateNumbers(gridSizeValue);
   countNumbers.textContent = numbers.length;
   rightNumbers.textContent = currentNumbers.length - 1;
 
-  game.style.width = `${gridSize * (config.side + config.gap) - config.gap}px`;
-  game.style.height = `${gridSize * (config.side + config.gap) - config.gap}px`;
+  game.style.width = `${
+    gridSizeValue * (config.side + config.gap) - config.gap
+  }px`;
+  game.style.height = `${
+    gridSizeValue * (config.side + config.gap) - config.gap
+  }px`;
   game.style.display = "grid";
-  game.style.gridTemplateColumns = `repeat(${gridSize}, ${config.side}px)`;
+  game.style.gridTemplateColumns = `repeat(${gridSizeValue}, ${config.side}px)`;
   game.style.gap = `${config.gap}px`;
 
   game.innerHTML = "";
@@ -158,8 +157,12 @@ function init() {
 
 document.addEventListener("DOMContentLoaded", init);
 
-initGameBtn.addEventListener("click", init);
 restartGameBtn.addEventListener("click", init);
+
+gridSize.addEventListener("change", (e) => {
+  gridSizeValue = Number(e.target.value);
+  init();
+});
 
 game.addEventListener("click", (event) => {
   if (event.target.classList.contains("square") && !gameOverStatus) {
