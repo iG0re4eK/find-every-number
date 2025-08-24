@@ -1,8 +1,7 @@
 const config = { side: 50, gap: 5 };
 
 const game = document.getElementById("game");
-const size = document.getElementById("size");
-const initGameBtn = document.getElementById("initGameBtn");
+const resetBtn = document.getElementById("resetBtn");
 const gridSize = document.getElementById("gridSize");
 const countNumbers = document.getElementById("countNumbers");
 const rightNumbers = document.getElementById("rightNumbers");
@@ -162,6 +161,16 @@ restartGameBtn.addEventListener("click", init);
 
 gridSize.addEventListener("change", (e) => {
   init();
+});
+
+resetBtn.addEventListener("click", function () {
+  this.blur();
+  init();
+  resetBtn.style.animation = "rotate 0.4s ease";
+
+  resetBtn.addEventListener("animationend", (e) => {
+    resetBtn.style.animation = "none";
+  });
 });
 
 game.addEventListener("click", (event) => {
