@@ -117,6 +117,7 @@ function getRandomIndex(arr) {
 }
 
 function init() {
+  gridSizeValue = Number(gridSize.value);
   timeOfThought = [];
   startTime = 0;
   lastCorrectTime = 0;
@@ -160,7 +161,6 @@ document.addEventListener("DOMContentLoaded", init);
 restartGameBtn.addEventListener("click", init);
 
 gridSize.addEventListener("change", (e) => {
-  gridSizeValue = Number(e.target.value);
   init();
 });
 
